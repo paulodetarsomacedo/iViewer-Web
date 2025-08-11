@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iViewer AI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+<div id="splash-screen" class="splash-screen">
+    <img src="iview.png" alt="iViewer 3DX Logo" class="splash-logo">
+    <div class="splash-text">
+      <p>Desenvolvido por Dr. Paulo de Tarso Silva de Macedo</p>
+      <p>&copy; <span id="current-year"></span></p>
+    </div>
+  </div>
+
+  <div class="app-container">
+
+    <div class="header-area">
+      <div class="toolbar-vertical">
+        <button class="tool-btn" id="btnMeasure">📏</button>
+        <div class="pencil-menu-container">
+          <button class="tool-btn" id="btnPencil">✏️</button>
+          <div id="pencil-menu" class="pencil-menu">
+            <div class="pencil-section">
+              <div class="pencil-subtitle">Espessura</div>
+              <div class="thickness-options">
+                <div class="thickness-option" data-thickness="2">Fina</div>
+                <div class="thickness-option" data-thickness="5">Média</div>
+              </div>
+            </div>
+            <div class="pencil-section">
+              <div class="pencil-subtitle">Cor</div>
+              <div class="color-options">
+                <div class="color-option active" data-color="#FF0000" style="background-color: #FF0000;"></div>
+                <div class="color-option" data-color="#00FF00" style="background-color: #00FF00;"></div>
+                <div class="color-option" data-color="#0000FF" style="background-color: #0000FF;"></div>
+                <div class="color-option" data-color="#FFFF00" style="background-color: #FFFF00;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="tool-btn" id="btnText">🅰️</button> <div class="arrow-menu-container">
+          <button class="tool-btn" id="btnArrow">➡️</button>
+          <div id="arrow-menu" class="arrow-menu">
+            <div class="arrow-section">
+              <div class="arrow-subtitle">Tipo de Seta</div>
+              <div class="arrow-options">
+                <div class="arrow-option active" data-type="normal">Normal</div>
+                <div class="arrow-option" data-type="outline">Contorno</div>
+                <div class="arrow-option" data-type="complex">Complexa</div> </div>
+            </div>
+          </div>
+        </div>
+        <button class="tool-btn" id="btnPolygon"><svg width="28" height="28"><circle cx="14" cy="14" r="10" stroke="#00FF7F" stroke-width="2" fill="transparent" /></svg></button>
+        <div id="polygon-color-menu" class="polygon-color-menu">
+            <div class="color-option" data-color="#FF0000" style="background-color: #FF0000;"></div>
+            <div class="color-option" data-color="#00FF00" style="background-color: #00FF00;"></div>
+            <div class="color-option" data-color="#0000FF" style="background-color: #0000FF;"></div>
+            <div class="color-option" data-color="#FFFF00" style="background-color: #FFFF00;"></div>
+            <div class="color-option" data-color="#FFA500" style="background-color: #FFA500;"></div> <div class="color-option" data-color="#800080" style="background-color: #800080;"></div> <div class="color-option" data-color="#FFFFFF" style="background-color: #FFFFFF;"></div> <div class="color-option" data-color="#000000" style="background-color: #000000;"></div> </div>
+        <div id="canvas-quick-actions-menu" class="context-menu" style="display: none;">
+        <div class="context-option" data-text="Ausência de todos os dentes">Ausência de todos os dentes</div>
+        <div class="context-option" data-text="Lesão cariosa proximal em:">Lesão cariosa proximal em:</div>
+        <div class="context-option" data-text="Agenesia dos dentes:">Agenesia dos dentes:</div>
+        <div class="context-option" data-text="Restauração nos dentes:">Restauração nos dentes:</div>
+      </div>
+        <button class="tool-btn" id="btnCamera">📸</button>
+        <button class="tool-btn" id="btnTrash">🗑️</button>
+        <button class="tool-btn" id="btn-lupa">🔍</button>
+      
+        <div id="lupa-menu" class="lupa-menu">
+            <div class="lupa-option" data-zoom="1.5">1,5x</div>
+            <div class="lupa-option" data-zoom="2">2x</div>
+            <div class="lupa-option" data-zoom="3">3x</div>
+        </div>
+        <button class="tool-btn-h dente-branco" id="btnInverter">🦷</button>
+        <div style="position: relative;">
+          <button class="tool-btn-h dente-vermelho" id="btnLUT"><span class="dente-icon">🦷</span></button>
+          <div id="lut-menu" class="lut-menu" style="display: none;">
+            <div class="lut-option">Sepia</div>
+            <div class="lut-option">Fire</div>
+            <div class="lut-option">Grays</div>
+            <div class="lut-option">Ice</div>
+            <div class="lut-option">Spectrum</div>
+            <div class="lut-option">3-3-2 RGB</div>
+            <div class="lut-option">Red</div>
+            <div class="lut-option">Green</div>
+            <div class="lut-option">Blue</div>
+            <div class="lut-option">Cyan</div>
+            <div class="lut-option">Magenta</div>
+            <div class="lut-option">Yellow</div>
+            <div class="lut-option">Red/Green</div>
+        </div>
+</div>
+
+        <button class="tool-btn-h grafico-barras" id="btnHistogram">
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <rect width="24" height="24" fill="transparent"/>
+            <rect x="4" y="10" width="2" height="8" fill="#00BFFF"/>
+            <rect x="8" y="6" width="2" height="12" fill="#00BFFF"/>
+            <rect x="12" y="12" width="2" height="6" fill="#00BFFF"/>
+            <rect x="16" y="4" width="2" height="14" fill="#00BFFF"/>
+            <rect x="20" y="8" width="2" height="10" fill="#00BFFF"/>
+          </svg>
+        </button>
+      </div>
+
+       <div id="histogramWindow" class="histogram-window" style="display: none;">
+      <div class="histogram-header">
+        <span>Histograma</span>
+        <button class="btn-close" id="btnCloseHistogram">X</button>
+      </div>
+      <canvas id="histogramCanvas" width="512" height="150"></canvas>
+      <div class="histogram-sliders">
+        <input type="range" id="histMin" min="0" max="255" value="0">
+        <input type="range" id="histGamma" min="1" max="500" value="100">
+        <input type="range" id="histMax" min="0" max="255" value="255">
+      </div>
+      <button class="btn-reset" id="btnResetHistogram">Resetar</button>
+    </div>
+
+    
+      <div class="top-bar" id="top-bar">
+        <button id="btnUpload">Upload</button>
+        <input type="text" id="link-imagem" placeholder="Cole o link aqui..." />
+      </div>
+    </div>
+
+    <div class="main-content-wrapper">
+      <div class="viewer-group">
+        <div class="viewer-container">
+          <div class="viewer-content-wrapper">
+            <div class="viewer">
+              <canvas id="canvas" ></canvas>
+              <div id="measurementResult" class="measurement-result"></div>
+              <button id="btnDuplicateRadiography" class="duplicate-radiography-btn">💻</button>
+              <input type="text" id="textInput" class="canvas-text-input" style="display: none;">
+            </div>
+            <div class="slider-row">
+              <div class="slider-container">
+                <label>Brilho</label>
+                <input type="range" min="0" max="200" value="100" id="sliderBrilho">
+              </div>
+              <div class="slider-container">
+                <label>Contraste</label>
+                <input type="range" min="0" max="200" value="100" id="sliderContraste">
+              </div>
+              <div class="slider-container">
+                <label>Nitidez</label>
+                <input type="range" min="0" max="10" value="0" id="sliderNitidez">
+              </div>
+              <div class="slider-container">
+                <label>Sombra</label>
+                <input type="range" min="0" max="100" value="0" id="sliderSombra">
+              </div>
+              <div class="slider-container">
+                <label>Luz</label>
+                <input type="range" min="0" max="100" value="0" id="sliderLuz">
+              </div>
+            </div>
+          </div>
+        </div>
+       <div class="report-actions">
+    <button id="btnGenerateReport" class="laudo-btn">Laudo <span class="laudo-icon"><img src="teclado.png" alt=""></span></button>
+    <button id="btnFullscreen" class="notebook-btn"><img src="macicon.png" alt=""></button>
+  </div>
+  <div class="report-controls">
+    <label class="checkbox-container">
+      <input type="checkbox" id="include-image-checkbox">
+      <span class="checkbox-label">Incluir Radiografia no Laudo</span>
+    </label>
+  </div>
+</div>
+      <div class="achados-panel">
+    <div class="achados-panel-resize"></div>
+    <div class="rf-title">Achados Radiográficos</div>
+
+    <div class="patient-name-input">
+        <label for="patient-name">Nome do Paciente:</label>
+        <input type="text" id="patient-name" placeholder="Digite o nome completo aqui">
+    </div>
+    
+    <div class="achados-tabs">
+        <div class="achados-tab active" id="tab-panoramica-btn">Panorâmica</div>
+        <div class="achados-tab" id="tab-intraoral-btn">Intraoral</div>
+    </div>
+    
+    <div class="text-toolbar">
+        <select class="font-family">
+            <option>Arial</option>
+            <option value="Trebuchet MS">Trebuchet</option>
+            <option value="Courier">Courier</option>
+            <option value="Impact">Impact</option>
+        </select>
+        <select class="font-size">
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="14">14</option>
+        </select>
+        <button class="btn-format" data-group="group-1"><b>B</b></button>
+        <button class="btn-format" data-group="group-1"><i>/</i></button>
+        <button class="btn-format" data-group="group-1"><u>U</u></button>
+        <input class="font-color" type="color"/>
+        <div class="bullet-selector">🔵
+            <div class="bullet-options">
+                <div>✅</div>
+                <div>🔷</div>
+                <div>🔴</div>
+                <div>🔵</div>
+                <div>🟢</div>
+                <div>🟡</div>
+            </div>
+        </div>
+        <button class="btn-align align-left" data-group="group-1"></button>
+        <button class="btn-align align-center" data-group="group-1"></button>
+        <button class="btn-align align-justify" data-group="group-1"></button>
+    </div>
+    
+    <div id="tab-panoramica-content" class="tab-content active">
+        <div class="rf-section">
+            <div class="rf-subtitle">Articulações Temporo-mandibular</div>
+            <div class="rf-box achados-box rf-box-half-height" contenteditable="true"></div>
+        </div>
+        <div class="rf-section">
+            <div class="rf-subtitle">Seios Maxilares</div>
+            <div class="rf-box rf-box-half-height" contenteditable="true"></div>
+        </div>
+        <div class="rf-section">
+            <div class="rf-subtitle">Fossas Nasais e Septo nasal</div>
+            <div class="rf-box rf-box-half-height" contenteditable="true"></div>
+        </div>
+        <div class="rf-section">
+            <div class="rf-subtitle">Maxilares e Dentes</div>
+            <div class="rf-subtabs">
+                <div class="rf-tab active" id="tab-maxila">Maxila</div>
+                <div class="rf-tab" id="tab-mandibula">Mandíbula</div>
+            </div>
+            <div class="rf-box" contenteditable="true" id="dente-box"></div>
+            <div id="maxila-content" style="display:none;"></div>
+            <div id="mandibula-content" style="display:none;"></div>
+
+        </div>
+        <div class="rf-section">
+            <div class="rf-subtitle conclusion">
+                <span>Conclusão</span>
+                <button id="ai-improve-panoramica" class="ai-improve-btn">AI</button>
+            </div>
+            <div id="conclusao-panoramica" class="rf-box conclusao-box" contenteditable="true"></div>
+        </div>
+    </div> <!-- Fim da tab-panoramica-content -->
+    
+    <div id="tab-intraoral-content" class="tab-content">
+        <!-- Seletor do Tipo de Exame Intraoral -->
+        <div class="intraoral-type-selector">
+            <label for="intraoral-type">Tipo de Exame:</label>
+            <select id="intraoral-type">
+                <option value="Intraoral">Intraoral</option>
+                <option value="Periapical">Periapical</option>
+                <option value="Oclusal">Oclusal</option>
+                <option value="Interproximal">Interproximal</option>
+            </select>
+        </div>
+        <!-- Seção: Dentes Intraoral -->
+        <div class="rf-section">
+            <div class="rf-subtitle">Dentes</div>
+            <div id="intraoral-dentes-box" class="rf-box achados-box rf-box-large-height" contenteditable="true"></div>
+        </div>
+        <!-- Seção: Conclusão Intraoral (Corrigida) -->
+        <div class="rf-section">
+            <div class="rf-subtitle conclusion">
+                <span>Conclusão</span>
+                <button id="ai-improve-intraoral" class="ai-improve-btn">AI</button>
+            </div>
+            <div id="conclusao-intraoral" class="rf-box conclusao-box" contenteditable="true"></div>
+        </div>
+    </div> <!-- Fim da tab-intraoral-content -->
+
+<!-- NOVO: HTML para o Modal da IA (coloque antes da tag de script) -->
+<div id="ai-modal-backdrop" class="ai-modal-backdrop hidden">
+  <div id="ai-modal" class="ai-modal">
+    <div class="ai-modal-header">
+      <h3>Sugestão da IA</h3>
+    </div>
+    <div id="ai-modal-content" class="ai-modal-content">
+      <!-- O conteúdo gerado pela IA aparecerá aqui -->
+    </div>
+    <div class="ai-modal-footer">
+      <button id="ai-btn-cancel" class="ai-btn-cancel">Cancelar</button>
+      <button id="ai-btn-apply" class="ai-btn-apply">Aplicar</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
