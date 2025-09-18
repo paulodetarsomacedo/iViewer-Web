@@ -80,7 +80,7 @@ body {
   position: absolute; 
   right: 35%;
   top: 10px; /* Ajuste a distância do topo conforme necessário */
-  width: 350px 
+  width: 250px 
 }
 
 .top-bar input {
@@ -177,7 +177,7 @@ body {
 .toolbar-vertical {
   display: flex;
   flex-direction: row; /* Empilha os botões verticalmente */
-  gap: 6px; /* Espaçamento entre os botões */
+  gap: 2px; /* Espaçamento entre os botões */
   padding: 15px; /* Preenchimento interno da barra de ferramentas */
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
