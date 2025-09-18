@@ -1,0 +1,1666 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000624;
+  font-family: sans-serif;
+  color: white;
+}
+
+/* Splash Screen Styles */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000624; /* Dark blue background */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999; /* Ensure it's on top */
+    opacity: 1;
+    transition: opacity 1s ease-out; /* Fade out animation */
+}
+
+.splash-screen.hidden {
+    opacity: 0;
+    pointer-events: none; /* Allows clicks/interactions on elements behind it */
+}
+
+.splash-logo {
+    max-width: 80%; /* Adjust as needed */
+    max-height: 80%; /* Adjust as needed */
+    object-fit: contain;
+    animation: pulse 2s infinite alternate; /* Simple animation for the logo */
+}
+
+.splash-text {
+    color: white;
+    font-size: 1.2em;
+    margin-top: 20px;
+    text-align: center;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+.app-container {
+  height: 100vh;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: #000624;
+  gap: 10px;
+}
+
+.viewer-container {
+ display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  background-color: #000624;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  
+}
+.top-bar {
+  display: flex;
+  gap: 10px;
+  position: absolute; 
+  right: 35%;
+  top: 10px; /* Ajuste a distância do topo conforme necessário */
+  width: 180px;
+}
+
+.top-bar input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid white;
+  background-color: #333;
+  color: white;
+  width: 500px;
+}
+
+.top-bar button {
+  padding: 10px 10px;
+  background-color: #7205e6;
+  border: 2px solid white;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  text-align: center; /* Centraliza o texto nos botões da top-bar */
+  height: 35px;
+  display: flex; /* ADICIONADO: Habilita o flexbox */
+  align-items: center; /* ADICIONADO: Centraliza o conteúdo verticalmente */
+  justify-content: center; /* ADICIONADO: Garante a centralização horizontal com flexbox */
+}
+
+
+.header-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 5px;
+  position: relative; /* Para posicionar o top-bar corretamente */
+}
+
+.notebook-btn {
+  margin-top: 20px;
+  padding: 13px 13px; /* Altere este valor para ajustar o preenchimento interno (e, consequentemente, o tamanho) */
+  background-color: #292828;
+  border: 1px solid #888;
+  border-radius: 8px;
+  color: white;
+  font-size: 10px; /* Altere este valor para ajustar o tamanho do ícone */
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+
+}
+.notebook-btn img {
+  width: 110px;
+  height: 110px;
+}
+.notebook-btn:hover {
+  background-color: #39393a;
+}
+
+.top-bar button:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: scale(1.03);
+}
+
+.top-bar input[type="text"] {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid white;
+  background-color: #1e1e1e;
+  color: white;
+  width: 325px;
+  height: 35px;
+}
+
+.main-content-wrapper {
+  display: flex;
+  flex-direction: row; /* ALTERADO: Agora organiza os blocos principais em linha (lado a lado) */
+  align-items: stretch; /* Alinha os itens ao topo */
+  width: 100%;
+  gap: 10px; /* Espaçamento entre o grupo do visualizador e o painel de achados */
+  flex-grow: 1;
+  position: relative;
+  overflow: visible;
+}
+
+/* Ajuste .viewer-container para ser uma linha para a barra de ferramentas e o conteúdo principal */
+.viewer-group {
+  display: flex;
+  flex-direction: column;
+  width: 65%;
+  height: 100%;
+  gap: 10px;
+  background-color: #000624
+}
+
+/* Estilo para a barra de ferramentas vertical */
+.toolbar-vertical {
+  display: flex;
+  flex-direction: row; /* Empilha os botões verticalmente */
+  gap: 2px; /* Espaçamento entre os botões */
+  padding: 15px; /* Preenchimento interno da barra de ferramentas */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  margin-bottom: -15px; /* Espaçamento abaixo da barra horizontal*/
+  margin-top: -5px;
+  margin-left: -10px;
+
+}
+
+/* Wrapper para o viewer e os sliders para mantê-los empilhados */
+.viewer-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Estilos para os botões individuais da barra de ferramentas (copiados e adaptados) */
+.toolbar-vertical .tool-btn,
+.toolbar-vertical .tool-btn-h {
+    width: 45px;
+    height: 45px;
+    background-color: transparent; /* Alterado de branco para transparente */
+    border: 1px solid white; /* Adicionado borda */
+    border-radius: 10px;
+    box-shadow: none; /* Removido sombra conforme o .toolbar .tool-btn original */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    cursor: pointer;
+    position: relative; /* Para dente-bicolor/diagonal */
+    overflow: hidden; /* Para dente-bicolor/diagonal */
+    color: white; /* Cor do texto padrão */
+    transition: background-color 0.2s ease;
+}
+
+.toolbar-vertical .tool-btn:hover,
+.toolbar-vertical .tool-btn-h:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Estilos específicos para botões com ícones/cores especiais */
+.toolbar-vertical .dente-branco {
+    color: white; /* Já é branco, mas explícito */
+}
+
+.toolbar-vertical .dente-vermelho .dente-icon {
+    font-size: 22px; /* Garante o tamanho do emoji */
+    filter: grayscale(100%) brightness(0.5) invert(1) sepia(100%) saturate(1000%) hue-rotate(330deg);
+    -webkit-filter: grayscale(100%) brightness(0.5) invert(1) sepia(100%) saturate(1000%) hue-rotate(330deg);
+}
+
+
+
+.toolbar-vertical .grafico-barras svg {
+    width: 28px;
+    height: 28px;
+    fill: #00BFFF; /* Garante que a cor do SVG esteja correta */
+}
+
+
+/* Estilos originais do viewer - mantidos */
+.viewer {
+  background-color: black;
+  border: 1px solid white;
+  border-radius: 12px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.slider-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 10px;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1; /* Permite que ocupe o espaço disponível */
+  flex-basis: 0; /* Base flexível para os itens */
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 2px solid #888;
+  border-radius: 8px;
+  padding: 8px;
+  width: 195px !important;
+  color: white;
+  text-align: center;
+}
+
+.slider-container label {
+  color: white;
+  margin-bottom: 5px;
+  font-size: 13px;
+  margin-top: -4px;
+}
+
+.slider-container input[type="range"] {
+  width: 100%; /* Ajusta a largura do slider ao contêiner */
+}
+.slider-container:hover label {
+    color: #00aaff; /* ALTERADO: Cor da label no hover para o mesmo azul do trilho */
+}
+
+/* 🎯 Estilo do input range */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 7px; /* Altura do trilho */
+  border-radius: 4px;
+  background: transparent; /* Certifica-se que o background do input é transparente */
+  outline: none;
+  cursor: pointer;
+  margin-top: 4px;
+  /* Define a variável CSS para o percentual do trilho preenchido */
+  --percent: 0%; /* Valor inicial padrão, será sobrescrito pelo JS */
+}
+
+/* Linha do slider (trilho) para WebKit (Chrome, Safari, Edge) */
+input[type=range]::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, #00aaff 0%, #00aaff var(--percent), #ccc var(--percent), #ccc 100%);
+  height: 7px; /* Altura do trilho */
+  border-radius: 3px;
+}
+
+/* Bolinha (thumb) para WebKit */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 15px;
+  width: 15px;
+  background: white;
+  border-radius: 50%;
+  border: 1px solid rgba(112, 112, 112, 0.423); /* Adicionado borda para visibilidade */
+  box-shadow: 0 0 4px rgba(0,0,0,0.4);
+  margin-top: -4px; /* Centraliza a bolinha no trilho */
+}
+
+/* Linha do slider (trilho) para Firefox */
+input[type=range]::-moz-range-track {
+  background: linear-gradient(to right, #00aaff 0%, #00aaff var(--percent), #ccc var(--percent), #ccc 100%);
+  height: 7px; /* Altura do trilho */
+  border-radius: 3px;
+}
+
+/* Bolinha (thumb) para Firefox */
+input[type=range]::-moz-range-thumb {
+  height: 15px;
+  width: 15px;
+  background: white;
+  border-radius: 50%;
+  border: 1px solid rgb(13, 255, 0);
+  box-shadow: 0 0 4px rgba(0,0,0,0.4);
+}
+
+/* Ajustes de tela cheia para a nova barra de ferramentas */
+body.fullscreen .viewer-container {
+    width: 100vw;
+    height: 100vh;
+    border: none; /* Removido borda em tela cheia para o viewer-container */
+    border-radius: 0;
+    padding: 0; /* Remove padding em tela cheia */
+    flex-direction: row; /* Mantém a barra de ferramentas e o conteúdo lado a lado */
+    align-items: flex-start;
+    gap: 15px; /* Mantém o espaçamento */
+    background-color: rgb(160, 5, 5); /* Fundo em tela cheia */
+}
+
+body.fullscreen .toolbar-vertical {
+    display: flex; !important; /* Garante que seja visível */
+    position: absolute; /* Torna-o absoluto dentro do viewer-container em tela cheia */
+    left: 20px; /* Ajuste conforme necessário */
+    top: 20px; /* Ajuste conforme necessário */
+    background-color: transparent;
+    backdrop-filter: blur(5px); /* Adiciona desfoque para um visual moderno */
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 99999; /* Garante que esteja no topo */
+}
+
+body.fullscreen .viewer-content-wrapper {
+    flex-grow: 1; /* Permite que o conteúdo do visualizador ocupe o espaço restante */
+    width: auto; /* Deixa o flexbox lidar com a largura */
+    height: 100%; /* Ocupa a altura total */
+    justify-content: center; /* Centraliza o visualizador verticalmente */
+    align-items: center; /* Centraliza o visualizador horizontalmente */
+}
+
+body.fullscreen .viewer {
+    width: 100%; /* Preenche o wrapper pai */
+    height: 100%; /* Preenche o wrapper pai */
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: rgb(0, 0, 0);
+}
+
+body.fullscreen #canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    max-width: none;
+    max-height: none;
+}
+
+body.fullscreen .slider-row {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+}
+
+body.fullscreen .slider-container {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+body.fullscreen {
+    background-color: rgb(16, 16, 16) !important;
+    overflow: hidden;
+  height: 100vh;
+}
+/* Garante que o botão notebook e a top-bar fiquem ocultos em tela cheia */
+body.fullscreen .notebook-btn,
+body.fullscreen .top-bar {
+  display: none !important;
+}
+body.fullscreen .app-container {
+     background-color: #000000;
+}
+
+#canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+/* Hover no container deixa o label azul */
+.slider-container:hover label {
+    color: #00aaff; /* Cor da label no hover para o mesmo azul do trilho */
+}
+
+/* ✅ VERSÃO FINAL - BISEL 3D COMPATÍVEL COM BORDAS ARREDONDADAS */
+/* style.css - ✅ NOVA VERSÃO PARA SOBREPOSIÇÃO */
+
+.achados-panel {
+    /* Estilos existentes que não mudam */
+    background-color: #000624;
+    font-family: Arial, sans-serif;
+    z-index: 9999;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    position: absolute;
+    top: 2px;
+    right: 0px;
+    height: 100%;
+    width: 34%;
+    margin-top: -65px;
+    padding: 10px;
+    overflow-y: auto;
+
+    /* --- A MÁGICA DO BISEL COM CANTOS ARREDONDADOS --- */
+
+    /* 1. O border-radius agora vai funcionar! */
+    border-radius: 12px;
+
+    /* 2. Uma borda sutil para definir a aresta do bisel. */
+    border: 2px solid rgb(255, 255, 255);
+
+    /* 3. Múltiplas sombras para criar o efeito 3D de luz e profundidade. */
+    box-shadow: 
+        /* Sombra interna escura (canto superior/esquerdo) -> cria a profundidade */
+        inset 1px 1px 3px rgba(0, 0, 0, 0.5),
+        
+        /* Brilho interno claro (canto inferior/direito) -> simula o reflexo da luz */
+        inset -2px -2px 5px rgba(255, 255, 255, 0.15),
+        
+        /* Sombra externa para destacar o painel da página */
+        0 10px 22px rgba(0, 0, 0, 0.9);
+}
+
+.achados-panel-resize {
+    position: absolute;
+    top: 0;
+    left: -8px; /* Posiciona o resizer à esquerda do painel */
+    width: 35px;
+    height: 100%;
+    cursor: ew-resize;
+    z-index: 10000;
+}
+
+.rf-title {
+  background: #1a66ad;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+  text-shadow: 1px 1px #000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  margin-bottom: 2px;
+  border: 3px solid white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.rf-section {
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.rf-subtitle {
+  background: #3b6fb3;
+  color: white;
+  padding: 6px 10px;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 8px;
+  text-shadow: 1px 1px #000;
+  margin-bottom: 0px;
+  border: 2px solid white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  margin-top: 0px;
+}
+
+.rf-subtitle.conclusion {
+  background: #8b0000;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+  text-shadow: 1px 1px #000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  border: 3px solid white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.rf-subtabs {
+  display: flex;
+  gap: 8px;
+  margin: 0px 0;
+}
+
+.rf-tab {
+  background: #505050;
+  color: white;
+  font-weight: bold;
+  padding: 5px 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  border: 2px solid white;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+.rf-tab:hover {
+  opacity: 1;
+}
+
+.rf-tab.active {
+  background: #ca0aff;
+  color: white;
+  font-weight: bold;
+  opacity: 1;
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+  border: 3px solid #fff; /* Adicionado para a aba ativa */
+  transform: scale(1.05); /* Efeito de zoom para a aba ativa */
+}
+
+/* ✅ VERSÃO APRIMORADA COM EFEITO DE FOCO E HOVER */
+.rf-box {
+  height: 50px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.1); /* Fundo sutilmente escuro para melhor contraste */
+  border-radius: 10px;
+  padding: 10px;
+  min-height: 50px;
+  color: rgb(255, 255, 255);
+  margin-top: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Borda mais sutil */
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.4); /* Sombra interna para profundidade */
+  /* Transição suave para os efeitos de hover e focus */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: Arial, sans-serif;
+    font-size: 14pt; /* O tamanho visual padrão que você pediu */
+    color: rgb(62, 245, 1);    /* A cor padrão para as caixas normais */
+    line-height: 1.5; /* Melhora a legibilidade */
+}
+
+/* Efeito de brilho ao passar o mouse (hover) ou ao clicar/editar (focus) */
+.rf-box:hover,
+.rf-box:focus {
+  outline: none; /* Remove o contorno padrão do navegador */
+  border-color: hsl(183, 100%, 50%); /* Cor da borda fica azul vibrante */
+  /* Sombra externa azul (o "glow") + a sombra interna que já existia */
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.4), 0 0 8px rgba(0, 170, 255, 0.7);
+}
+/* Nova classe para as caixas de texto com metade da altura */
+.rf-box-half-height {
+  height: 60px !important; /* Metade de 100px */
+  min-height: 60px !important; /* Metade de 100px */
+}
+
+.conclusao-box {
+    color: rgb(0, 162, 255);
+}
+
+#dente-box {
+  min-height: 180px; /* Altura mínima para a caixa de texto de dente */
+}
+
+/* ✅ VERSÃO APRIMORADA COM ESTILO HARMÔNICO */
+.text-toolbar {
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Levemente aumentado para melhor espaçamento */
+  /* Fundo "glassmorphism": escuro, translúcido e com desfoque */
+  background-color: rgba(10, 30, 40, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 6px 8px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Borda sutil */
+  margin-bottom: 6px;
+  flex-wrap: nowrap;
+}
+
+.text-toolbar select.font-family,
+.text-toolbar select.font-size {
+    /* Garante que o texto dentro do select seja branco e visível */
+    color: white; 
+    /* A aparência pode variar entre navegadores, então damos um padding generoso */
+    padding: 4px 8px; 
+    height: 30px !important;
+}
+
+
+.text-toolbar select.font-family {
+  width: 145px !important; /* Largura final para "Trebuchet MS" */
+}
+
+.text-toolbar select.font-size {
+  width: 70px !important;  /* Largura final para acomodar "12" e a seta */
+}
+/* Estilo base para TODOS os controles da toolbar */
+.text-toolbar select,
+.text-toolbar button,
+.text-toolbar input[type="color"],
+.text-toolbar .bullet-selector {
+  background-color: rgba(255, 255, 255, 0.1); /* Fundo translúcido sutil */
+  color: white; /* Texto/ícone branco */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Efeito Hover para TODOS os controles */
+.text-toolbar select:hover,
+.text-toolbar button:hover,
+.text-toolbar input[type="color"]:hover,
+.text-toolbar .bullet-selector:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Estilo para botões quando estão ATIVOS (ex: Negrito ligado) */
+.text-toolbar .active {
+  background-color: #00aaff; /* Azul vibrante da interface */
+  color: #02222E; /* Texto escuro para contraste */
+  border-color: #00aaff;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.2); /* Efeito de "pressionado" */
+}
+
+/* Ajustes finos para botões específicos */
+.text-toolbar button,
+.text-toolbar input[type="color"],
+.text-toolbar .bullet-selector,
+.text-toolbar .btn-align {
+  width: 28px !important;
+  height: 28px !important;
+  padding: 2px !important;
+  margin: 0 2px !important;
+  font-weight: bold;
+}
+
+/* ✅ VERSÃO APRIMORADA COM LARGURAS AUMENTADAS */
+.text-toolbar select.font-family {
+  width: 140px !important; /* Largura aumentada para caber "Trebuchet MS" */
+  flex-wrap: wrap;
+}
+
+.text-toolbar select.font-size {
+  width: 75px !important; /* Largura levemente aumentada para garantir visibilidade */
+}
+.bullet-selector {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  position: relative;
+  padding: 4px 8px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.bullet-options {
+  display: none;
+  position: absolute;
+  top: 20px;
+  left: 0;
+  background: white;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+.bullet-selector:hover .bullet-options {
+  display: list-item;
+}
+
+.bullet-options div {
+  padding: 6px;
+  cursor: pointer;
+}
+
+.bullet-options div:hover {
+  background-color: #eee;
+}
+
+
+.text-toolbar select.font-family {
+  width: 140px !important; /* Ajuste para caber no layout */
+  height: 30px !important;
+  font-size: 14px !important;
+}
+
+.text-toolbar select.font-size {
+  width: 70px !important; /* Ajuste para caber no layout */
+  height: 30px !important;
+  font-size: 11px !important;
+}
+
+/* Alinhamento com linhas horizontais visuais */
+.btn-align.align-left::before,
+.btn-align.align-center::before,
+.btn-align.align-justify::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 14px;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+/* Alinhar à esquerda */
+.btn-align.align-left::before {
+  background-image: linear-gradient(#000 2px, transparent 2px),
+                    linear-gradient(#000 2px, transparent 2px),
+                    linear-gradient(#000 2px, transparent 2px);
+  background-position: left top, left center, left bottom;
+  background-size: 60% 2px;
+  background-repeat: no-repeat;
+}
+
+/* Centralizar */
+.btn-align.align-center::before {
+  background-image: linear-gradient(#000 2px, transparent 2px),
+                    linear-gradient(#000 2px, transparent 2px),
+                    linear-gradient(#000 2px, transparent 2px);
+  background-position: center top, center center, center bottom;
+  background-size: 60% 2px;
+  background-repeat: no-repeat;
+}
+
+/* Justificar */
+.btn-align.align-justify::before {
+  background-image: linear-gradient(#000 2px, transparent 2px),
+                    linear-gradient(#000 2px, transparent 2px),
+                    linear-gradient(#000 2px, transparent 2px);
+  background-position: left top, left center, left bottom;
+  background-size: 100% 2px;
+  background-repeat: no-repeat;
+}
+
+.text-toolbar button,
+.text-toolbar input[type="color"],
+.text-toolbar .bullet-selector,
+.text-toolbar .btn-align {
+  width: 28px !important;
+  height: 26px !important;
+  padding: 2px !important;
+  margin: 0 2px !important;
+  font-size: 13px !important;
+  border-radius: 6px !important;
+}
+
+.rf-box u, .rf-box span[style*="text-decoration: underline"] {
+  text-decoration-color: inherit !important;
+}
+
+.rf-box {
+  font-size: 11px !important; /* Tamanho da fonte do texto editável */
+}
+
+/* Correções de margem para o painel de achados */
+.achados-panel .rf-subtitle,
+.achados-panel .rf-box,
+.achados-panel .rf-subtabs {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+/* Espaçamento extra abaixo da Conclusão */
+.rf-subtitle.conclusion + .rf-box {
+  margin-bottom: 0px !important;
+}
+
+
+.left-side-viewer-group {
+  /* ... outras propriedades existentes ... */
+  flex-shrink: 1; /* ADICIONE esta linha */
+}
+
+body.fullscreen .achados-panel {
+    display: none !important; /* ESTA É A REGRA QUE OCULTA O PAINEL EM TELA CHEIA */
+}
+
+.laudo-btn {
+  position: static; /* cite: 2 */
+  top: 400px; /* cite: 2 */
+  left: 130px; /* cite: 2 */
+  padding: 37px 85px; /* cite: 2 */
+  background-color: #1e1e1e; /* cite: 2 */
+  border: 1px solid #ffffff98; /* cite: 2 */
+  border-radius: 8px; /* cite: 2 */
+  color: white; /* cite: 2 */
+  font-size: 30px; /* This will now control only the "Laudo" text size */ /* cite: 2 */
+  cursor: pointer; /* cite: 2 */
+  z-index: 100; /* cite: 2 */
+  transition: background-color 0.2s ease; /* cite: 2 */
+  width: 280px; /* cite: 2 */
+  height: 110px; /* cite: 2 */
+  display: flex; /* cite: 2 */
+  align-items: center; /* cite: 2 */
+  justify-content: center; /* cite: 2 */
+}
+
+.laudo-btn .laudo-icon {
+  font-size: 30px; /* Adjust this value to change the icon size */
+  margin-left: 5px; /* Add some space between the text and the icon if needed */
+  margin-inline-start: 5px;
+}
+.laudo-btn img {
+  width: 192px;
+  height: 72px;
+}
+.laudo-btn:hover {
+  background-color: #39393a;
+  color: cyan
+}
+
+/* Oculta o botão Laudo em modo tela cheia */
+body.fullscreen .laudo-btn {
+  display: none !important;
+}
+
+/* NOVO: Garante que a cor do sublinhado siga a cor da fonte */
+.rf-box[contenteditable="true"] u,
+.rf-box[contenteditable="true"] [style*="text-decoration: underline"] {
+  text-decoration-color: currentColor !important;
+}
+
+/* NOVO: Isso também pode ser útil para resetar qualquer cor de fundo indesejada ao formatar */
+.rf-box[contenteditable="true"] *[style*="background-color"] {
+    background-color: transparent !important;
+}
+
+.bullet-options.show {
+  display: block;
+}
+
+.text-toolbar select.font-family {
+  width: 100px !important; /* Largura diminuída */
+  height: 28px !important; /* Ajusta a altura para consistência */
+  font-size: 12px !important; /* Ajusta o tamanho da fonte para consistência */
+}
+
+.text-toolbar select.font-size {
+  width: 65px !important; /* Largura diminuída */
+  height: 28px !important; /* Ajusta a altura para consistência */
+  font-size: 12px !important; /* Ajusta o tamanho da fonte para consistência */
+}
+
+/* Esconde as opções de bullet por padrão */
+.bullet-options {
+  display: none;
+  /* Garante que o menu de opções apareça acima de outros elementos */
+  position: absolute;
+  /* Você pode ajustar top/left/right/bottom conforme a posição desejada */
+  /* Exemplo de posicionamento, ajuste conforme necessário para o layout */
+  /* top: 100%; */
+  /* left: 0; */
+  background-color: #333; /* Exemplo de cor de fundo */
+  border: 1px solid #555; /* Exemplo de borda */
+  padding: 10px; /* Exemplo de preenchimento */
+  z-index: 1000; /* Garante que fique acima de outros elementos */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Mostra as opções de bullet ao passar o mouse sobre o seletor */
+/* Assumindo que .bullet-selector é o container pai ou o botão que você quer que acione o hover */
+.bullet-selector:hover .bullet-options {
+  display: block;
+}
+
+/* Se o .bullet-options não for um filho direto do .bullet-selector mas estiver próximo no DOM e você quiser que o hover no seletor o mostre: */
+/* .bullet-selector:hover + .bullet-options,  */
+/* .bullet-selector:hover ~ .bullet-options { */
+/* display: block; */
+/* } */
+
+
+
+
+.duplicate-radiography-btn {
+  position: absolute;
+  bottom: 10px; /* Adjust as needed for spacing from the bottom */
+  right: 10px; /* Adjust as needed for spacing from the right */
+  width: 40px; /* Small size */
+  height: 40px; /* Small size */
+  background-color: rgba(255, 255, 255, 0.2); /* Slightly transparent white */
+  border: 1px solid rgba(255, 255, 255, 0.4); /* Subtle border */
+  border-radius: 5px; /* Slightly rounded corners */
+  color: white; /* White icon */
+  font-size: 25px; /* Icon size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20; /* Ensure it's above the canvas */
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.duplicate-radiography-btn:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.lupa-menu {
+  position: absolute;
+  background-color: #1e1e1e;
+  border: 1px solid white;
+  border-radius: 8px;
+  padding: 5px;
+  z-index: 1002; /* 🔼 acima do canvas (z-index:10) */
+  color: white;
+  top: 65px; /* ajuste conforme seu botão */
+  left: 160px; /* ajuste para a posição ideal */
+  display: none;
+}
+
+.lupa-option {
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.lupa-option:hover {
+  background-color: #444;
+}
+
+#lupa-circulo {
+  position: absolute;
+  border: 2px solid #00FFFF;
+  border-radius: 50%;
+  width: 5cm;
+  height: 5cm;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1000000; /* acima do canvas */
+  display: none;
+}
+
+.lut-menu {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background-color: #1e1e1e;
+  color: white;
+  border: 1px solid white;
+  border-radius: 8px;
+  padding: 6px 0;
+  z-index: 10000;
+  display: none;
+  min-width: 120px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.lut-option {
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.lut-option:hover {
+  background-color: #007bff;
+}
+
+/* Estilos para a janela do histograma */
+.histogram-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  border: 2px solid #00BFFF;
+  border-radius: 12px;
+  padding: 20px;
+  z-index: 10000;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  color: white;
+  width: 580px;
+  text-align: center;
+}
+
+.histogram-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.btn-close {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.histogram-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+
+.histogram-sliders input[type=range] {
+  width: 100%;
+  appearance: none;
+  height: 6px;
+  background: #444;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+.histogram-sliders input[type=range]::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #00BFFF;
+  border: 2px solid white;
+  border-radius: 50%;
+}
+
+.btn-reset {
+  background-color: #00BFFF;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+/* Estilos para o resultado da medida */
+.measurement-result {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  z-index: 100; /* Garante que fique acima do canvas */
+  display: none; /* Inicialmente oculto */
+}
+
+/* Estilo para o botão de medida quando ativo */
+#btnMeasure.active {
+  background-color: #ff2f00; /* Azul para indicar que está ativo */
+  color: white;
+}
+
+/* Estilos para o menu do lápis */
+.pencil-menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+.pencil-menu {
+  display: none; /* Escondido por padrão */
+  position: absolute;
+  background-color: #333;
+  border: 1px solid #555;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  z-index: 1000;
+  min-width: 150px;
+  left: calc(100% + 10px); /* Posiciona à direita do botão do lápis */
+  top: 0;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pencil-menu.active {
+  display: flex;
+}
+
+.pencil-section {
+  margin-bottom: 10px;
+}
+
+.pencil-subtitle {
+  font-size: 0.9em;
+  color: #bbb;
+  margin-bottom: 5px;
+}
+
+.thickness-options, .color-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.thickness-option {
+  padding: 8px 12px;
+  background-color: #555;
+  border: 1px solid #666;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.thickness-option:hover {
+  background-color: #007bff;
+}
+
+.thickness-option.active {
+  background-color: #00BFFF;
+  border-color: #00FFFF;
+}
+
+.color-option {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #666;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.1s ease;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+}
+
+.color-option.active {
+  border-color: white;
+  box-shadow: 0 0 5px rgba(255,255,255,0.7);
+}
+
+#btnPencil.active {
+  background-color: #ff2f00; /* Azul para indicar que está ativo */
+  color: white;
+}
+
+/* Estilo para o botão de texto quando ativo */
+#btnText.active {
+  background-color: #ff2f00; /* Cor para indicar que está ativo */
+  color: white;
+}
+
+/* Estilo para o input de texto no canvas */
+.canvas-text-input {
+  position: absolute;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: rgb(0, 213, 255); /* Cor do texto */
+  font-family: Arial; /* Fonte */
+  font-size: 20px; /* Tamanho da fonte */
+  border: 1px solid cyan;
+  border-radius: 5px;
+  z-index: 100;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+  text-shadow: 1px 1px 2px black; /* Sombra preta adicionada */
+}
+
+#btnArrow.active {
+  background-color: #ff2f00; /* Azul para indicar que está ativo */
+  color: white;
+}
+
+/* Estilos do Menu da Seta - Semelhante ao Menu do Lápis */
+.arrow-menu-container {
+    position: relative;
+    display: inline-block; /* Permite que o menu se posicione em relação ao botão */
+}
+
+.arrow-menu {
+    display: none; /* Escondido por padrão */
+    position: absolute;
+    background-color: #2a2a2a; /* Fundo escuro */
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 10px;
+    z-index: 1000;
+    top: 100%; /* Posiciona abaixo do botão */
+    left: 0;
+    min-width: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.arrow-menu.active {
+    display: block;
+}
+
+.arrow-section {
+    margin-bottom: 10px;
+}
+
+.arrow-subtitle {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #bbb;
+    font-size: 0.9em;
+}
+
+.arrow-options {
+    display: flex;
+    flex-direction: column; /* Empilha as opções verticalmente */
+    gap: 5px;
+}
+
+.arrow-option {
+    padding: 8px 10px;
+    background-color: #3a3a3a;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: center;
+    font-size: 0.85em;
+}
+
+.arrow-option:hover {
+    background-color: #555;
+}
+
+.arrow-option.active {
+    background-color: #007bff; /* Cor ativa */
+    color: white;
+    border: 1px solid #0056b3;
+}
+
+ /* Estilos para o menu de cores do polígono */
+    .polygon-color-menu {
+      position: absolute;
+      background-color: #222;
+      border: 1px solid #555;
+      border-radius: 8px;
+      padding: 10px;
+      display: none; /* Escondido por padrão */
+      flex-direction: column;
+      gap: 8px;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .polygon-color-menu .color-option {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.2s ease;
+    }
+
+    .polygon-color-menu .color-option:hover,
+    .polygon-color-menu .color-option.active {
+      border-color: #00FFFF; /* Cor de destaque para a seleção */
+    }
+
+    #btnInverter.active {
+  background-color: #ff2f00; /* Azul para indicar que está ativo */
+  color: white;
+}
+
+/* Novos estilos para as abas de Achados */
+.achados-tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #555;
+    margin-top: 1px;
+    margin-bottom: 1px;
+  
+  
+}
+
+.achados-tab {
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 17px;
+    border-radius: 8px;
+    color: #ffffff;
+    background-color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: 200px;
+    font-weight: bold;
+    border: 3px solid #555;
+    box-shadow: 0 0 6px rgba(0,0,0,0.4);
+    border: 1px solid #fff; 
+    display: flex;
+    width: 100%;
+    flex: 1;
+    text-align: center;
+    margin-right: 5px; /* Adiciona uma margem à direita de cada botão */
+    margin-left: 5px;
+  
+   
+}
+
+.achados-tab:hover {
+    background-color: #e7aa38;
+    color: white;
+}
+
+.achados-tab.active {
+    background-color: #e7aa38;
+    color: #fff;
+    box-shadow: 0 0 6px rgba(0,0,0,0.4);
+  border: 3px solid #fff; /* Adicionado para a aba ativa */
+  transform: scale(1.05); /* Efeito de zoom para a aba ativa */
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    align-items: center;
+}
+
+.rf-box-large-height {
+    min-height: 180px;
+}
+
+/* Estilos para o menu de seleção do tipo de Intraoral */
+.intraoral-type-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #222;
+    border-radius: 8px;
+    border: 1px solid #444;
+}
+
+.intraoral-type-selector label {
+    font-size: 1em;
+    color: #bbb;
+    white-space: nowrap; /* Impede que o rótulo quebre a linha */
+}
+
+.intraoral-type-selector select {
+    flex-grow: 1; /* Faz com que o select preencha o espaço restante */
+    padding: 8px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #333;
+    border: 1px solid #555;
+    border-radius: 5px;
+    cursor: pointer;
+    -webkit-appearance: none; /* Remove o estilo padrão de select em navegadores Webkit */
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23cccccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+    background-repeat: no-repeat;
+    background-position: right 8px top 50%;
+    background-size: 16px;
+}
+
+.intraoral-type-selector select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Estilos para o campo de nome do paciente */
+.patient-name-input {
+    margin-bottom: 2px;
+    padding: 5px;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    border: 1px solid #444;
+}
+
+.patient-name-input label {
+    display: block;
+    font-size: 10px;
+    color: #bbb;
+    margin-bottom: 2px;
+}
+
+.patient-name-input input {
+    width: 100%;
+    padding: 4px;
+    font-size: 10px;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 5px;
+    box-sizing: border-box; /* Garante que o padding não aumente a largura total */
+}
+
+.patient-name-input input::placeholder {
+    color: #888;
+}
+
+.patient-name-input input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.report-controls {
+    display: flex;
+    flex-direction: column;/* Alinha os itens verticalmente */
+    align-items: flex-start; /* Alinha os itens à esquerda */
+    gap: 10px; /* Adiciona 10 pixels de espaço entre o botão e o checkbox */
+    margin-top: 20px; /* Exemplo de margem para afastar do conteúdo acima */
+}
+
+/* Opcional: Estilo para o rótulo do checkbox, se você não tiver */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.checkbox-label {
+    margin-left: 5px;
+}
+
+.report-controls {
+    position: absolute; /* Libera o contêiner do fluxo normal */
+    bottom: 113px;       /* Posição de 20 pixels a partir da parte inferior da página */
+    left: 0px;         /* Posição de 20 pixels a partir da esquerda da página */
+    z-index: 100;       /* Garante que o botão fique acima de outros elementos */
+    display: flex;
+    flex-direction: row; /* Alinha o botão e o checkbox verticalmente */
+    gap: 10px; /* Adiciona um espaço entre o botão e o checkbox */
+    margin-top: 750px; /* Adiciona um espaço acima do contêiner */
+    z-index: 100px;
+    font-size: 12px;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #ffffff79;
+    border-radius: 5px;
+    padding: 4px 4px;
+    width: 277px;
+}
+.report-controls:hover {
+  background-color: #39393a;
+  color: cyan;
+}
+
+.context-menu {
+      position: absolute;
+      display: none;
+      background-color: #3a3a3a;
+      border: 1px solid #555;
+      border-radius: 5px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 10002; /* Garante que fique sobre outros elementos */
+      padding: 5px 0;
+      color: white;
+      font-family: 'Trebuchet MS', sans-serif;
+    }
+
+    .context-menu .context-option {
+      padding: 9px 18px;
+      cursor: pointer;
+      white-space: nowrap; /* Impede que o texto quebre linha */
+    }
+
+    .context-menu .context-option:hover {
+      background-color: #007bff;
+    }
+
+ .text-toolbar .btn-format.active,
+.text-toolbar .btn-align.active {
+  background-color: #00FFFF !important; /* Cor ciano vibrante */
+  color: #02222E !important;           /* Texto escuro para contraste */
+  border-color: #00FFFF !important;     /* Borda da mesma cor */
+  font-weight: bold;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4); /* Efeito de "pressionado" */
+}
+
+.report-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  align-items: flex-end;
+  padding: 0;
+  padding-bottom: 5;
+  position: relative;
+  border-radius: 12px;
+}
+
+body.fullscreen .report-controls {
+  display: none !important;
+}
+
+/* Estilo específico para a caixa de texto da conclusão */
+.rf-box {
+  min-height: 120px; /* Defina a altura que você deseja aqui */
+  /* Outros estilos, se necessário, podem ser adicionados */
+}
+
+body.fullscreen .duplicate-radiography-btn {
+  position: absolute; /* Permite posicionar o elemento fora do fluxo normal */
+  bottom: 100px;       /* Define a distância do botão à parte inferior do seu contêiner */
+  right: 20px;        /* Define a distância do botão à parte direita do seu contêiner */
+}
+
+/* NOVO: Estilos para o botão de melhoria com IA */
+.ai-improve-btn {
+  background-color: #8b0000; /* Mesma cor de fundo do título */
+  color: white;
+  border: 1px solid #ffffff;
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.ai-improve-btn:hover {
+  background-color: #ff0000;
+  transform: scale(1.1);
+}
+
+/* Garante que o título e o botão fiquem na mesma linha */
+.rf-subtitle.conclusion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* NOVO: Estilos para o Modal da IA */
+.hidden {
+  display: none !important;
+}
+
+.ai-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 100000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ai-modal {
+  background-color: #000624;
+  border: 2px solid #00BFFF;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0, 191, 255, 0.3);
+  width: 90%;
+  max-width: 600px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-modal-header {
+  padding: 15px;
+  border-bottom: 1px solid #00BFFF;
+  text-align: center;
+}
+
+.ai-modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.ai-modal-content {
+  padding: 20px;
+  min-height: 150px;
+  max-height: 50vh;
+  overflow-y: auto;
+  line-height: 1.6;
+}
+
+.ai-modal-footer {
+  padding: 15px;
+  border-top: 1px solid #00BFFF;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.ai-modal-footer button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ai-btn-apply {
+  background-color: #e74c3c; /* Vermelho */
+  color: white;
+}
+
+.ai-btn-apply:hover {
+  background-color: #c0392b;
+  transform: scale(1.05);
+}
+
+.ai-btn-cancel {
+  background-color: #3498db; /* Azul */
+  color: white;
+}
+
+.ai-btn-cancel:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
