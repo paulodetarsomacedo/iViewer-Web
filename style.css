@@ -80,7 +80,7 @@ body {
   position: absolute; 
   right: 35%;
   top: 10px; /* Ajuste a distância do topo conforme necessário */
-  width: 250px 
+  width: 200px;
 }
 
 .top-bar input {
